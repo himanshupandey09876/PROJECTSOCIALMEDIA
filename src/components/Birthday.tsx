@@ -6,19 +6,19 @@ const Birthday = () => {
     <div className='p-4 bg-white rounded-lg 
     shadow-md text-sm flex flex-col gap-4'>
         {/* top */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-8">
             <span className="text-gray-500">Birthdays</span>
             <Link href={"/"}
             className="text-blue-500 text-xs">
             See all</Link>
         </div>
         {/* User */}
-        <div className="flex items-center justify-between">
-            <div className="flex  items-center gap-4 ">
+        <div className="flex items-center justify-between gap-8">
+            <div className="flex  items-center gap-2 ">
                 <Image 
                 alt=""
-                width={40}
-                height={40}
+                width={30}
+                height={30}
                 src={"https://www.cse.iitk.ac.in/users/vishalsavarna/img/wlcm.png"}
                 className="w-10 h-10 rounded-full object-cover">
                 </Image>
