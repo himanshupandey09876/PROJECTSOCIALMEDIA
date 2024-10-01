@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 // without auth not access the page 
 // by default the pages are public
-const isProtectedRoute = createRouteMatcher(["/settings(.*)"])
+const isProtectedRoute = createRouteMatcher(["/settings(.*)","/"])
 // above added list of routes to be protected
 export default clerkMiddleware((auth,req)=>{
     if (isProtectedRoute(req)) auth().protect();

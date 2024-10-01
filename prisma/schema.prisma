@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String          @id @default(uuid())
+  username              String          @unique
+  avatar                String?
+  cover                 String?
+  name                  String?
+  surname               String?
+  description           String?
+  city                  String?
+  school                String?
+  work                  String?
+  website               String?
+  created_at            DateTime        @default(now())
+  posts                 Post[]
+  likes                 Like[]
+  comments              Comment[]
+  followers             Follower[]      @relation("UserFollowers")
+  following             Follower[]      @relation("UserFollowings")
+  followRequestSent     FollowRequest[] @relation("followRequestSent")
+  followRequestReceived FollowRequest[] @relation("followRequestReceived")
+  blocks                Block[]         @relation("BlockSent")
+  blockedBy             Block[]         @relation("BlockReceived")
+  Stories                 Story[]
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  desc       String
+  img        String?
+  created_at DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  likes      Like[]
+  comments   Comment[]
+
+}
+
+// by pressing alt shift f we get the relation established easily the code is automatically generated
+model Like {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  // post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  // postId     Int
+
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+  Comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId Int?
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     Int
+  likes      Like[]
+}
+
+model Follower {
+  id          Int      @id @default(autoincrement())
+  created_at  DateTime @default(now())
+  follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId  String
+  following   User     @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String
+}
+
+model FollowRequest {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  sender     User     @relation("followRequestSent", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   String
+  receiver   User     @relation("followRequestReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId String
+
+  @@unique([senderId, receiverId])
+}
+
+model Block {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  blocker    User     @relation("BlockSent", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockerId  String
+  blocked    User     @relation("BlockReceived", fields: [blockedId], references: [id], onDelete: Cascade)
+  blockedId  String
+
+  @@unique([blockerId, blockedId])
+}
+
+model Story {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  expires_at DateTime
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @unique
+}

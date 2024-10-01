@@ -1,9 +1,48 @@
 import Feed from "@/components/Feed";
 import LeftMenu from "@/components/LeftMenu";
 import RightMenu from "@/components/RightMenu";
+import prisma from "@/lib/client";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
-export default function ProfilePage(){
+ const ProfilePage = async function({params}:{params:{username:string}}){
+  const username = params.username;
+
+    const user = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+      include:{
+        _count:{
+          select:{
+            followers: true,
+            following: true,
+            posts: true,
+          }
+        }
+      }
+    });
+    if(!user) return notFound();
+
+    const {userId:currentUserId} = auth();
+    // taking userId from auth and assigning it to currentUserId
+
+    let isBlocked;
+    
+    if(currentUserId ){
+      const res= await prisma.block.findFirst({
+        where:{
+          blockerId: user.id,
+          blockedId: currentUserId,
+        }
+      })
+      if(res) isBlocked = true;
+    } else{
+      isBlocked = false;
+    }
+
+
     return (
         <div className='flex gap-6 p-6'>
         {/* left */}
@@ -55,3 +94,4 @@ export default function ProfilePage(){
       </div>
     )
 } 
+export default ProfilePage;
