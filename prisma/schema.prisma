@@ -68,6 +68,7 @@ model Like {
 
 model Comment {
   id         Int      @id @default(autoincrement())
+  desc        String
   created_at DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
@@ -113,4 +114,5 @@ model Story {
   expires_at DateTime
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String   @unique
+  img  String 
 }

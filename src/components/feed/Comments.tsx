@@ -1,10 +1,23 @@
+import prisma from "@/lib/client"
 import Image from "next/image"
+import CommentList from "./CommentList"
 
-const Comments = () => {
+const Comments = async({postId}:{postId:number}) => {
+    const comments=await prisma.comment.findMany({
+        where:{
+            postId: postId,
+        },
+        include:{
+            user:true
+        }
+    })
   return (
     <div className=''>
         {/* write */}
-        <div className="flex items-center gap-4">
+        <CommentList comments={comments} postId={postId}/>
+
+
+        {/* <div className="flex items-center gap-4">
             <Image className="w-8 h-8 rounded-full"
             src={"https://images.pexels.com/photos/26793646/pexels-photo-26793646/free-photo-of-a-corgi-sitting-outdoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"} 
             alt="" width={32} height={32}
@@ -17,18 +30,18 @@ const Comments = () => {
                 alt="" width={16} height={16}
                 className="cursor-pointer"/>
             </div>
-        </div>
+        </div> */}
         {/* COmments list */}
-        <div className="">
+        {/* <div className=""> */}
             {/* comment */}
-            <div className="justify-between flex gap-4 mt-6">
+            {/* <div className="justify-between flex gap-4 mt-6">
                 {/* avatAR */}
-                <Image className="w-8 h-8 rounded-full"
+                {/* <Image className="w-8 h-8 rounded-full"
                  src={"https://images.pexels.com/photos/26793646/pexels-photo-26793646/free-photo-of-a-corgi-sitting-outdoors.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"} 
                   alt="" width={40} height={40}
-             ></Image>
+             ></Image>  */}
                 {/* description */}
-              <div className="flex flex-col gap-2 flex-1">
+              {/* <div className="flex flex-col gap-2 flex-1">
                     <span className="font-medium">Vishal</span>
                     <p>kuchh toh comment krna hi tha 
                         toh kr diya
@@ -45,15 +58,15 @@ const Comments = () => {
                             <div>Reply</div>
                         </div>
                        
-                    </div>
-                </div>
+                    </div> 
+                </div> */}
                 
                 {/* icon */}
-                <Image src={"/more.png"} alt="" width={16} height={16}
+                {/* <Image src={"/more.png"} alt="" width={16} height={16}
                 className="cursor-pointer w-4 h-4"></Image>
 
-            </div>
-        </div>
+            </div> */}
+        {/* </div>  */}
     </div>
   )
 }

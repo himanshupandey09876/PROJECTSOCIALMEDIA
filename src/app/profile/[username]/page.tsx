@@ -84,7 +84,7 @@ import { notFound } from "next/navigation";
                     </div>
                 </div>
             </div>
-            <Feed></Feed>
+            <Feed username={user.username}></Feed>
           </div>
         </div>
   

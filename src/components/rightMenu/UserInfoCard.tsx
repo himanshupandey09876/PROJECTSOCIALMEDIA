@@ -52,7 +52,7 @@ const UserInfoCard = async({user}:{user:User}) => {
         <div className="flex items-center justify-between font-medium gap-4">
          <span className="text-gray-500">User Information</span>
             {currentUserId==user.id?
-            (<UpdateUser ></UpdateUser>)
+            (<UpdateUser user={user} ></UpdateUser>)
             :(
             <Link href={"/"}
             className="text-blue-500 text-xs">
