@@ -62,7 +62,7 @@ const AddPost = () => {
                 {/* <button>
                     Send
                     </button> */}
-                <AddPostButton/>
+                <AddPostButton />
                 </div>
             </form>
             {/* postoptions */}
